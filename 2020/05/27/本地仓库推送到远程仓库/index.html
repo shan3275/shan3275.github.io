@@ -15,7 +15,7 @@
 <meta property="og:description" content="在工作中有个项目仓库是建在公司服务器，远程pull或者push都是通过虚拟局域网进行，偶尔会出现虚拟局域网不太稳定的情况，所以准备将仓库直接推送到github，正好github也推出了个人私有仓库免费项目。 新建仓库在github中新建仓库，直接在网页操作即可。提醒：千万不要添加说明文件，空的仓库即可。 添加远程地址在本地添加github远程仓库地址,例如： 1$ git remote add g">
 <meta property="og:locale" content="zh">
 <meta property="article:published_time" content="2020-05-27T03:46:26.000Z">
-<meta property="article:modified_time" content="2020-05-27T04:03:53.927Z">
+<meta property="article:modified_time" content="2020-05-27T04:08:00.743Z">
 <meta property="article:author" content="Cooper Liu">
 <meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary">
@@ -103,6 +103,9 @@
 
 <p>说明如果想要本地分支和远程分支名字不同，可以执行如下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  git push -u github 本地分支名字:远程分支名字</span><br></pre></td></tr></table></figure>
+
+<p>查看本地分支和远程分支的对应关系，可以执行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  git branch -vv</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
