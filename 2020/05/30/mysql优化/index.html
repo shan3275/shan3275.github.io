@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>mysql优化 | 欧耶山哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="之前对于mysql出在一个会用能用的阶段，最近有个项目因为并发的原因，导致cpu使用率很高，系统很卡，这几天通过设计优化和mysql优化初步解决了卡顿的问题。记录一下初步心得，后续有进步持续增加输出。 设计优化对于并发数高的系统，查询频繁的表项，设计上可以放到缓存中的，建议就放到缓存中,比如redis。我在项目优化中，起初将一个170万条表项的数据放在了mysql中，大量的查询，就把数据库的使用率">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql优化">
+<meta property="og:url" content="https://shan3275.github.io/2020/05/30/mysql%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="欧耶山哥">
+<meta property="og:description" content="之前对于mysql出在一个会用能用的阶段，最近有个项目因为并发的原因，导致cpu使用率很高，系统很卡，这几天通过设计优化和mysql优化初步解决了卡顿的问题。记录一下初步心得，后续有进步持续增加输出。 设计优化对于并发数高的系统，查询频繁的表项，设计上可以放到缓存中的，建议就放到缓存中,比如redis。我在项目优化中，起初将一个170万条表项的数据放在了mysql中，大量的查询，就把数据库的使用率">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2020-05-30T02:01:29.000Z">
+<meta property="article:modified_time" content="2020-05-30T02:56:54.645Z">
+<meta property="article:author" content="Cooper Liu">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="欧耶山哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">欧耶山哥</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://shan3275.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql优化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/30/mysql%E4%BC%98%E5%8C%96/" class="article-date">
+  <time datetime="2020-05-30T02:01:29.000Z" itemprop="datePublished">2020-05-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Mysql/">Mysql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql优化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前对于mysql出在一个会用能用的阶段，最近有个项目因为并发的原因，导致cpu使用率很高，系统很卡，这几天通过设计优化和mysql优化初步<br>解决了卡顿的问题。记录一下初步心得，后续有进步持续增加输出。</p>
+<h3 id="设计优化"><a href="#设计优化" class="headerlink" title="设计优化"></a>设计优化</h3><p>对于并发数高的系统，查询频繁的表项，设计上可以放到缓存中的，建议就放到缓存中,比如redis。我在项目优化中，起初将一个170万条表项的数据放在了mysql中，大量的查询，就把数据库的使用率拉的很高，优化之后，效果明显。</p>
+<h3 id="mysql优化方向"><a href="#mysql优化方向" class="headerlink" title="mysql优化方向"></a>mysql优化方向</h3><ol>
+<li><p>增加索引<br>频繁查询的字段建议增加索引，可以明显提高查询速度</p>
+</li>
+<li><p>最小值最大值查询比较<br>对于匹配最小值最大值比较，建议通过order by 方式查询，然后在代码之中进行判断比较，对于性能提升有一定的帮助。</p>
+</li>
+</ol>
+<h3 id="mysql优化定位"><a href="#mysql优化定位" class="headerlink" title="mysql优化定位"></a>mysql优化定位</h3><p>初步接触mysql优化，我从最开始的一脸懵逼，到现在有了初步了解，先把这几天学习到的技巧记录如下。</p>
+<ol>
+<li>查看运行的线程</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; show processlist;</span><br></pre></td></tr></table></figure>
+<p>如果开着web-server，默认就会有tcp的链接.<br>show processlist 显示的信息都是来自MySQL系统库 information_schema 中的 processlist 表。所以使用下面的查询语句可以获得相同的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; select * from information_schema.processlist</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>查看执行的命令</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; select * from information_schema.`PROCESSLIST` <span class="built_in">where</span> info is not null;</span><br><span class="line">MariaDB [xxdb]&gt; select * from information_schema.processlist <span class="built_in">where</span> Command != <span class="string">'Sleep'</span> order by Time desc;</span><br></pre></td></tr></table></figure>
+<p>查看当前执行的现场，并排序，可以找到比较耗时的命令，进一步进行优化。</p>
+<ol start="3">
+<li>开启慢查询日志记录</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; show variables like <span class="string">"%slow%"</span>;</span><br><span class="line">MariaDB [xxdb]&gt; show variables like <span class="string">'long_query_time'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上述命令是查询慢查询的配置,可以打开慢查询。<br>打开慢查询</p>
+<h4 id="方法一：全局变量设置"><a href="#方法一：全局变量设置" class="headerlink" title="方法一：全局变量设置"></a>方法一：全局变量设置</h4><p>将 slow_query_log 全局变量设置为“ON”状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; <span class="built_in">set</span> global slow_query_log=<span class="string">'ON'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>设置慢查询日志存放的位置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; <span class="built_in">set</span> global slow_query_log_file=<span class="string">'/var/log/mariadb/mysql-slow.log'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>查询超过1秒就记录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; <span class="built_in">set</span> global long_query_time=1;</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二：配置文件设置"><a href="#方法二：配置文件设置" class="headerlink" title="方法二：配置文件设置"></a>方法二：配置文件设置</h4><p>修改配置文件my.cnf，在[mysqld]下的下方加入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">slow_query_log = ON</span><br><span class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql/data/slow.log</span><br><span class="line">long_query_time = 1</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shan3275.github.io/2020/05/30/mysql%E4%BC%98%E5%8C%96/" data-id="ckat1kgzi00008961gxyt8ct5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/27/mysql%E6%80%A7%E8%83%BD%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mysql性能查看工具</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Mysql/" style="font-size: 20px;">Mysql</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/05/30/mysql%E4%BC%98%E5%8C%96/">mysql优化</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/27/mysql%E6%80%A7%E8%83%BD%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7/">mysql性能查看工具</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/27/%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/">本地仓库推送到远程仓库</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/19/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Cooper Liu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
