@@ -15,7 +15,7 @@
 <meta property="og:description" content="之前对于mysql出在一个会用能用的阶段，最近有个项目因为并发的原因，导致cpu使用率很高，系统很卡，这几天通过设计优化和mysql优化初步解决了卡顿的问题。记录一下初步心得，后续有进步持续增加输出。 设计优化对于并发数高的系统，查询频繁的表项，设计上可以放到缓存中的，建议就放到缓存中,比如redis。我在项目优化中，起初将一个170万条表项的数据放在了mysql中，大量的查询，就把数据库的使用率">
 <meta property="og:locale" content="zh">
 <meta property="article:published_time" content="2020-05-30T02:01:29.000Z">
-<meta property="article:modified_time" content="2020-05-30T02:56:54.645Z">
+<meta property="article:modified_time" content="2020-05-30T03:08:44.617Z">
 <meta property="article:author" content="Cooper Liu">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -131,6 +131,16 @@
 
 <h4 id="方法二：配置文件设置"><a href="#方法二：配置文件设置" class="headerlink" title="方法二：配置文件设置"></a>方法二：配置文件设置</h4><p>修改配置文件my.cnf，在[mysqld]下的下方加入</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">slow_query_log = ON</span><br><span class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql/data/slow.log</span><br><span class="line">long_query_time = 1</span><br></pre></td></tr></table></figure>
+
+<p>重启mysql或者mariadb.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># systemctl restart mariadb</span></span><br></pre></td></tr></table></figure>
+
+<p>测试慢查询<br>1.执行一条慢查询SQL语句</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; select sleep(3);</span><br></pre></td></tr></table></figure>
+<p>2.查看是否生成慢查询日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls  /var/log/mariadb/mysql-slow.log</span></span><br></pre></td></tr></table></figure>
+<p>如果日志存在，MySQL开启慢查询设置成功！</p>
+
       
     </div>
     <footer class="article-footer">

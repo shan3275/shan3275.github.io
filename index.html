@@ -128,6 +128,16 @@
 
 <h4 id="方法二：配置文件设置"><a href="#方法二：配置文件设置" class="headerlink" title="方法二：配置文件设置"></a>方法二：配置文件设置</h4><p>修改配置文件my.cnf，在[mysqld]下的下方加入</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">slow_query_log = ON</span><br><span class="line">slow_query_log_file = /usr/<span class="built_in">local</span>/mysql/data/slow.log</span><br><span class="line">long_query_time = 1</span><br></pre></td></tr></table></figure>
+
+<p>重启mysql或者mariadb.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># systemctl restart mariadb</span></span><br></pre></td></tr></table></figure>
+
+<p>测试慢查询<br>1.执行一条慢查询SQL语句</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [xxdb]&gt; select sleep(3);</span><br></pre></td></tr></table></figure>
+<p>2.查看是否生成慢查询日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls  /var/log/mariadb/mysql-slow.log</span></span><br></pre></td></tr></table></figure>
+<p>如果日志存在，MySQL开启慢查询设置成功！</p>
+
       
     </div>
     <footer class="article-footer">
