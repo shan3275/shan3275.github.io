@@ -5,19 +5,20 @@
   
 
   
-  <title>mysql性能查看工具 | 欧耶山哥</title>
+  <title>Dichotomy | 欧耶山哥</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这几天上线一个项目，并发数大概有1000，导致mysql性能很差。性能调优这块刚刚接触，很多参数都是懵逼的状态，所以找了两个工具:mytop 和doDBA，两个工具都不错，可以将mysql的状态信息实时显示出来，方便查看。 1. mytop安装123$ sudo yum install epel-release$ sudo yum install mytop$ sudo vi &#x2F;root&#x2F;.myt">
+  <meta name="description" content="二分法作为比较基础的算法，虽然工作中不常使用，但是作为编程基础，还是很有必要整理下的，下面是二分法的一个版本的代码，记录在blog，以备后面查看温习。 Code123456789101112131415161718192021222324#include &lt;stdio.h&gt; int BSearch(int d[], int target, int low, int high)&amp;#123">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql性能查看工具">
-<meta property="og:url" content="https://shan3275.github.io/2020/05/27/mysql%E6%80%A7%E8%83%BD%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:title" content="Dichotomy">
+<meta property="og:url" content="https://shan3275.github.io/2020/07/27/dichotomy/index.html">
 <meta property="og:site_name" content="欧耶山哥">
-<meta property="og:description" content="这几天上线一个项目，并发数大概有1000，导致mysql性能很差。性能调优这块刚刚接触，很多参数都是懵逼的状态，所以找了两个工具:mytop 和doDBA，两个工具都不错，可以将mysql的状态信息实时显示出来，方便查看。 1. mytop安装123$ sudo yum install epel-release$ sudo yum install mytop$ sudo vi &#x2F;root&#x2F;.myt">
+<meta property="og:description" content="二分法作为比较基础的算法，虽然工作中不常使用，但是作为编程基础，还是很有必要整理下的，下面是二分法的一个版本的代码，记录在blog，以备后面查看温习。 Code123456789101112131415161718192021222324#include &lt;stdio.h&gt; int BSearch(int d[], int target, int low, int high)&amp;#123">
 <meta property="og:locale" content="zh">
-<meta property="article:published_time" content="2020-05-27T08:43:00.000Z">
-<meta property="article:modified_time" content="2020-05-27T08:59:38.475Z">
+<meta property="article:published_time" content="2020-07-27T08:06:18.000Z">
+<meta property="article:modified_time" content="2020-07-27T08:17:03.711Z">
 <meta property="article:author" content="Cooper Liu">
-<meta property="article:tag" content="Mysql">
+<meta property="article:tag" content="Dichotomy">
+<meta property="article:tag" content="二分法">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="欧耶山哥" type="application/atom+xml">
@@ -67,14 +68,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-mysql性能查看工具" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-dichotomy" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/05/27/mysql%E6%80%A7%E8%83%BD%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7/" class="article-date">
-  <time datetime="2020-05-27T08:43:00.000Z" itemprop="datePublished">2020-05-27</time>
+    <a href="/2020/07/27/dichotomy/" class="article-date">
+  <time datetime="2020-07-27T08:06:18.000Z" itemprop="datePublished">2020-07-27</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Mysql/">Mysql</a>
+    <a class="article-category-link" href="/categories/Algorithms/">Algorithms</a>►<a class="article-category-link" href="/categories/Algorithms/%E7%AE%97%E6%B3%95/">算法</a>
   </div>
 
   </div>
@@ -85,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      mysql性能查看工具
+      Dichotomy
     </h1>
   
 
@@ -93,26 +94,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这几天上线一个项目，并发数大概有1000，导致mysql性能很差。性能调优这块刚刚接触，很多参数都是懵逼的状态，所以找了两个工具:mytop 和doDBA，两个工具都不错，可以将mysql的状态信息实时显示出来，方便查看。</p>
-<h3 id="1-mytop"><a href="#1-mytop" class="headerlink" title="1. mytop"></a>1. mytop</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a><a href="https://subscription.packtpub.com/book/networking_and_servers/9781785282393/9/ch09lvl1sec69/configuring-mytop-for-a-mysql-database" target="_blank" rel="noopener">安装</a></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install epel-release</span><br><span class="line">$ sudo yum install mytop</span><br><span class="line">$ sudo vi /root/.mytop</span><br></pre></td></tr></table></figure>
-<p>添加信息如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">host=localhost</span><br><span class="line">db=mysql</span><br><span class="line">delay=3</span><br><span class="line">port=3306</span><br><span class="line">socket=</span><br><span class="line">batchmode=0</span><br><span class="line">color=1</span><br><span class="line">idle=1</span><br></pre></td></tr></table></figure>
-<p>最后执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mytop</span></span><br></pre></td></tr></table></figure>
+        <p>二分法作为比较基础的算法，虽然工作中不常使用，但是作为编程基础，还是很有必要整理下的，下面是二分法的一个版本的代码，记录在blog，以备后面查看温习。</p>
+<h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"> </span><br><span class="line">int BSearch(int d[], int target, int low, int high)</span><br><span class="line">&#123;</span><br><span class="line">	int m;</span><br><span class="line">	<span class="keyword">while</span> (low &lt;= high)</span><br><span class="line">	&#123;</span><br><span class="line">		m = (low + high) / 2;</span><br><span class="line">		<span class="keyword">if</span> (target &lt; d[m])</span><br><span class="line">			high = m - 1;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (target&gt;d[m])</span><br><span class="line">			low = m + 1;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">return</span> m;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">return</span> -1;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">int  main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">	int a[] = &#123; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10&#125;;</span><br><span class="line">	int c = BSearch(a, 5, 0, 10);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"index:%d\n"</span>, c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-doDBA"><a href="#2-doDBA" class="headerlink" title="2. doDBA"></a>2. doDBA</h3><h4 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a><a href="https://github.com/dblucyne/dodba_tools" target="_blank" rel="noopener">安装</a></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  wget https://raw.githubusercontent.com/dblucyne/dodba_tools/master/doDBA --no-check-certificate</span></span><br><span class="line"><span class="comment">#  wget https://raw.githubusercontent.com/dblucyne/dodba_tools/master/doDBA.conf --no-check-certificate</span></span><br><span class="line"><span class="comment">#  chmod +x doDBA</span></span><br></pre></td></tr></table></figure>
-<p>编辑doDBA.conf 文件，填入mysql信息。<br>执行命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  ./doDBA -h '127.0.0.1' -mysql</span></span><br></pre></td></tr></table></figure>
-
-<p>下一步好好研究一下各个参数的含义。</p>
-
+<h4 id="Compile-and-Run"><a href="#Compile-and-Run" class="headerlink" title="Compile and Run"></a>Compile and Run</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c -o main</span><br><span class="line">./main</span><br><span class="line">index:4</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shan3275.github.io/2020/05/27/mysql%E6%80%A7%E8%83%BD%E6%9F%A5%E7%9C%8B%E5%B7%A5%E5%85%B7/" data-id="ckap48gv60000x6618gfh6rya" class="article-share-link">Share</a>
+      <a data-url="https://shan3275.github.io/2020/07/27/dichotomy/" data-id="ckd48lcp40000e5614orx6qsl" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dichotomy/" rel="tag">Dichotomy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" rel="tag">二分法</a></li></ul>
 
     </footer>
   </div>
@@ -120,19 +112,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/05/30/mysql%E4%BC%98%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          mysql优化
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/05/27/%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/06/17/flask-websocket-bad-Request/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">本地仓库推送到远程仓库</div>
+      <div class="article-nav-title">flask-websocket-bad-Request</div>
     </a>
   
 </nav>
